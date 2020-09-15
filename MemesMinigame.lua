@@ -177,6 +177,8 @@ function eventNewGame()
     game = true
     time_write = false
     stop = false
+    isPlayer1Playing = false
+    isPlayer2Playing = false
     time_start = 0
     time_to = os.time()
     time = os.time()
@@ -197,5 +199,12 @@ function eventNewPlayer(name)
         ui.addTextArea(1, "<p align='center'><font size='16'><b>"..player2[1].."", name, 542, 89, 424, 28, 0x000000, 0x000000, 1, true)
     else
         ui.addTextArea(1, "<a href='event:right'><p align='center'><font size='16'><b> [اضغط هنا]", name, 542, 89, 424, 28, 0x000000, 0x000000, 1, true)
+    end
+end
+function eventPlayerLeft(name)
+    if name == player1[1] or name == player2[1] then
+        tfm.exec.setGameTime(0,true)
+        tfm.exec.chatMessage('<r>تحذير : هناك خطأ في عدد اللاعبين المتنافسين </r>')
+        print("<r>تحذير : هناك خطأ في عدد اللاعبين المتنافسين </r>")
     end
 end
