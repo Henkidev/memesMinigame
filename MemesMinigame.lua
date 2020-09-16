@@ -5,11 +5,13 @@ tfm.exec.disableAutoScore(true)
 tfm.exec.disableAutoShaman(true)
 tfm.exec.disableAutoTimeLeft(true)
 tfm.exec.disablePhysicalConsumables(true)
-tfm.exec.newGame([[<C><P DS="m;163,168,627,166"/><Z><S><S X="402" Y="200" T="0" L="810" H="409" P="0,0,0.3,0.2,0,0,0,0" i="0,0,173e28fe01b.png" c="4"/><S X="135" Y="189" T="14" L="278" H="17" P="0,0,0.3,0.2,0,0,0,0"/><S X="662" Y="190" T="14" L="274" H="22" P="0,0,0.3,0.2,0,0,0,0"/><S X="-30" Y="250" T="14" L="67" H="623" P="0,0,0,0,0,0,0,0"/><S X="834" Y="252" T="14" L="67" H="623" P="0,0,0,0,0,0,0,0"/><S X="37" Y="161" T="14" L="31" H="1" P="0,0,0.3,0.2,0,0,0,0"/><S X="760" Y="160" T="14" L="29" H="5" P="0,0,0.3,0.2,0,0,0,0"/></S><D/><O/><L/></Z></C>]])
-pics = {"173e2f95f22.png","173e30acb86.png","173e30aeab6.png","173e3135bb2.png","173e3137c02.png","173e313943e.png","173e313abb0.png","173e31baffd.png","173e31c68a3.png"}
+tfm.exec.newGame([[<C><P/><Z><S><S X="402" Y="200" T="0" L="810" H="409" P="0,0,0.3,0.2,0,0,0,0" i="0,0,173e28fe01b.png" c="4"/><S X="135" Y="189" T="14" L="278" H="17" P="0,0,0.3,0.2,0,0,0,0"/><S X="662" Y="190" T="14" L="274" H="22" P="0,0,0.3,0.2,0,0,0,0"/><S X="-30" Y="250" T="14" L="67" H="623" P="0,0,0,0,0,0,0,0"/><S X="834" Y="252" T="14" L="67" H="623" P="0,0,0,0,0,0,0,0"/><S X="37" Y="161" T="14" L="31" H="1" P="0,0,0.3,0.2,0,0,0,0"/><S X="760" Y="160" T="14" L="29" H="5" P="0,0,0.3,0.2,0,0,0,0"/></S><D><DS X="395" Y="160"/></D><O/><L/></Z></C>]])
+pics = {"173e2f95f22.png","173e30acb86.png","173e30aeab6.png","173e3135bb2.png","173e3137c02.png","173e313943e.png","173e313abb0.png","173e31baffd.png","173e31c68a3.png","17497d8a7ab.png","17497d8c9ff.png","17497d8f65b.png","17497d9275f.png","17497d9cb63.png","17497da1410.png","17497da9014.png","17497daa786.png","17497db9bb7.png"}
+admins = {["Aron#6810"] = true}
 players = {}
 player1 = {}
 player2 = {}
+banned = {}
 start_player1 = false
 start_player2 = false
 end_player1 = false
@@ -25,41 +27,57 @@ function start_game()
     ui.addTextArea(1, "<a href='event:right'><p align='center'><font size='16'><b> [اضغط هنا]", nil, 542, 89, 424, 28, 0x000000, 0x000000, 1, true)
 end
 start_game()
+
 vote_player1 = 0
 vote_player2 = 0
 function eventTextAreaCallback(id,name,callback)
+    local x = tfm.get.room.playerList[name].x
     if callback == "left" then
-        start_player1 = true
-        isPlayer1Playing = true
-        ui.removeTextArea(1,name)
-        tfm.exec.movePlayer(name,37,142)
-        ui.addTextArea(0, "<p align='center'><font size='16'><b>"..name.."", nil, -11, 82, 101, 28, 0x000000, 0x000000, 1, true)
-        table.insert(player1,name)
-        tfm.exec.chatMessage("<v>[Module] : </v><vp> "..name.." </vp><n> لقد اختار الكرسي الأيسر </n>",nil)
-        if isPlayer2Playing == true then
-            ui.addTextArea(1, "<p align='center'><font size='16'><b>"..player2[1].."", nil, 542, 89, 424, 28, 0x000000, 0x000000, 1, true)
+        if x > 0 and x < 90 then
+            start_player1 = true
+            isPlayer1Playing = true
+            ui.removeTextArea(1,name)
+            tfm.exec.movePlayer(name,37,142)
+            ui.addTextArea(0, "<p align='center'><font size='16'><b>"..name.."", nil, -11, 82, 101, 28, 0x000000, 0x000000, 1, true)
+            table.insert(player1,name)
+            tfm.exec.chatMessage("<v>[Module] : </v><vp> "..name.." </vp><n> لقد اختار الكرسي الأيسر </n>",nil)
+            if isPlayer2Playing == true then
+                ui.addTextArea(1, "<p align='center'><font size='16'><b>"..player2[1].."", nil, 542, 89, 424, 28, 0x000000, 0x000000, 1, true)
+            end
+        else
+            tfm.exec.chatMessage("<rose> انت بعيد جدا !!</rose>",name)
         end
     elseif callback == "right" then
-        start_player2 = true
-        isPlayer2Playing = true
-        tfm.exec.movePlayer(name,758,142)
-        ui.removeTextArea(0,name)
-        ui.addTextArea(1, "<p align='center'><font size='16'><b>"..name.."", nil, 542, 89, 424, 28, 0x000000, 0x000000, 1, true)
-        table.insert(player2,name)
-        tfm.exec.chatMessage("<v>[Module] : </v><vp> "..name.." </vp><n> لقد اختار الكرسي الأيمن</n>",nil)
-        if isPlayer1Playing == true then
-            ui.addTextArea(0, "<p align='center'><font size='16'><b>"..player1[1].."", nil, -11, 82, 101, 28, 0x000000, 0x000000, 1, true)
+        if x > 710 and x < 800 then
+            start_player2 = true
+            isPlayer2Playing = true
+            tfm.exec.movePlayer(name,758,142)
+            ui.removeTextArea(0,name)
+            ui.addTextArea(1, "<p align='center'><font size='16'><b>"..name.."", nil, 542, 89, 424, 28, 0x000000, 0x000000, 1, true)
+            table.insert(player2,name)
+            tfm.exec.chatMessage("<v>[Module] : </v><vp> "..name.." </vp><n> لقد اختار الكرسي الأيمن</n>",nil)
+            if isPlayer1Playing == true then
+                ui.addTextArea(0, "<p align='center'><font size='16'><b>"..player1[1].."", nil, -11, 82, 101, 28, 0x000000, 0x000000, 1, true)
+            end
+        else
+            tfm.exec.chatMessage("<rose> انت بعيد جداََََ </rose>",name)
         end
     elseif callback == "player_left" then
-        vote_player1 = vote_player1 + 1
-        tfm.exec.chatMessage("<vp>"..name.." لقد قام بالتصويت ")
-        ui.removeTextArea(7,name)
-        ui.removeTextArea(8,name)
+        if players[name].canVote then
+            vote_player1 = vote_player1 + 1
+            tfm.exec.chatMessage("<vp>"..name.." لقد قام بالتصويت ")
+            ui.removeTextArea(7,name)
+            ui.removeTextArea(8,name)
+            players[name].canVote = false
+        end
     elseif callback == "player_right" then
-        vote_player2 = vote_player2 + 1
-        tfm.exec.chatMessage("<r>"..name.." لقد قام بالتصويت ")
-        ui.removeTextArea(7,name)
-        ui.removeTextArea(8,name)
+        if players[name].canVote then
+            vote_player2 = vote_player2 + 1
+            tfm.exec.chatMessage("<r>"..name.." لقد قام بالتصويت ")
+            ui.removeTextArea(7,name)
+            ui.removeTextArea(8,name)
+            players[name].canVote = false
+        end
     end
 end
 function newMeme()
@@ -73,6 +91,9 @@ function newMeme()
     end
 end
 function endGame()
+    for name , player in next, tfm.get.room.playerList do
+        players[name].canVote = true
+    end
     ui.addTextArea(7, "<a href='event:player_left'><p align='center'><font size='23'><b><vp> Vote", name, 143, 89, 76, 36, 0x05080a, 0x000000, 1, true)
     ui.addTextArea(8, "<a href='event:player_right'><p align='center'><font size='23'><b><ch> Vote", name, 557, 88, 76, 36, 0x05080a, 0x000000, 1, true)
     tfm.exec.removePhysicObject(1)
@@ -102,7 +123,7 @@ win = os.time()
 time_to_write = 0
 function eventLoop(past,left)
     if left<1000 then
-        tfm.exec.newGame([[<C><P DS="m;163,168,627,166"/><Z><S><S X="402" Y="200" T="0" L="810" H="409" P="0,0,0.3,0.2,0,0,0,0" i="0,0,173e28fe01b.png" c="4"/><S X="135" Y="189" T="14" L="278" H="17" P="0,0,0.3,0.2,0,0,0,0"/><S X="662" Y="190" T="14" L="274" H="22" P="0,0,0.3,0.2,0,0,0,0"/><S X="-30" Y="250" T="14" L="67" H="623" P="0,0,0,0,0,0,0,0"/><S X="834" Y="252" T="14" L="67" H="623" P="0,0,0,0,0,0,0,0"/><S X="37" Y="161" T="14" L="31" H="1" P="0,0,0.3,0.2,0,0,0,0"/><S X="760" Y="160" T="14" L="29" H="5" P="0,0,0.3,0.2,0,0,0,0"/></S><D/><O/><L/></Z></C>]])
+        tfm.exec.newGame([[<C><P/><Z><S><S X="402" Y="200" T="0" L="810" H="409" P="0,0,0.3,0.2,0,0,0,0" i="0,0,173e28fe01b.png" c="4"/><S X="135" Y="189" T="14" L="278" H="17" P="0,0,0.3,0.2,0,0,0,0"/><S X="662" Y="190" T="14" L="274" H="22" P="0,0,0.3,0.2,0,0,0,0"/><S X="-30" Y="250" T="14" L="67" H="623" P="0,0,0,0,0,0,0,0"/><S X="834" Y="252" T="14" L="67" H="623" P="0,0,0,0,0,0,0,0"/><S X="37" Y="161" T="14" L="31" H="1" P="0,0,0.3,0.2,0,0,0,0"/><S X="760" Y="160" T="14" L="29" H="5" P="0,0,0.3,0.2,0,0,0,0"/></S><D><DS X="395" Y="160"/></D><O/><L/></Z></C>]])
     end
     if game == true then
         ui.addTextArea(2, "<p align='center'><font size='35'><b>0", nil, 377, 103, 65, 54, 0x000000, 0x000000, 1, true)
@@ -163,6 +184,7 @@ function eventLoop(past,left)
         end
     end
 end
+
 function eventNewGame()
     tfm.exec.chatMessage("<V>[Module] :</v><n> جولة جديدة قد بدأت !!</n>")
     player1 = {}
@@ -186,10 +208,19 @@ function eventNewGame()
     start_game()
     vote_player1 = 0
     vote_player2 = 0
+    for i = 1, #banned do
+        ui.addTextArea(3, "",banned[i], -377, -85, 1544, 799, 0x070c0f, 0x000000, 1, true)
+        ui.addTextArea(4, "<p align='center'><font size='53'> عذرا تم حظرك من اللعب :(", banned[i], 168, 134, 452, 228, 0x070c0f, 0x070c0f, 1, true)
+    end
 end
 function eventNewPlayer(name)
+    players[name] = {canVote = false}
     tfm.exec.chatMessage("<o> >[Aron#6810][" .. os.date("%H") .. ":" .. os.date("%M") .. "]</o><cep> مرحبا بك في النمط </cep>",name)
     tfm.exec.respawnPlayer(name)
+    for i = 1, #banned do
+        ui.addTextArea(3, "",banned[i], -377, -85, 1544, 799, 0x070c0f, 0x000000, 1, true)
+        ui.addTextArea(4, "<p align='center'><font size='53'> عذرا تم حظرك من اللعب :(", banned[i], 168, 134, 452, 228, 0x070c0f, 0x070c0f, 1, true)
+    end
     if player1[1] then
         ui.addTextArea(0, "<p align='center'><font size='16'><b>"..player1[1].."", name, -11, 82, 101, 28, 0x000000, 0x000000, 1, true)
     else
@@ -208,3 +239,30 @@ function eventPlayerLeft(name)
         print("<r>تحذير : هناك خطأ في عدد اللاعبين المتنافسين </r>")
     end
 end
+function eventChatCommand(name,command)
+    local args = {}
+    for name in command:gmatch("%S+") do
+        table.insert(args, name)
+    end
+    if admins[name] then
+        if command == "skip" then
+            tfm.exec.newGame([[<C><P/><Z><S><S X="402" Y="200" T="0" L="810" H="409" P="0,0,0.3,0.2,0,0,0,0" i="0,0,173e28fe01b.png" c="4"/><S X="135" Y="189" T="14" L="278" H="17" P="0,0,0.3,0.2,0,0,0,0"/><S X="662" Y="190" T="14" L="274" H="22" P="0,0,0.3,0.2,0,0,0,0"/><S X="-30" Y="250" T="14" L="67" H="623" P="0,0,0,0,0,0,0,0"/><S X="834" Y="252" T="14" L="67" H="623" P="0,0,0,0,0,0,0,0"/><S X="37" Y="161" T="14" L="31" H="1" P="0,0,0.3,0.2,0,0,0,0"/><S X="760" Y="160" T="14" L="29" H="5" P="0,0,0.3,0.2,0,0,0,0"/></S><D><DS X="395" Y="160"/></D><O/><L/></Z></C>]])
+        end
+    end
+    if admins[name] then
+        if args[1] == "ban" then
+            table.insert(banned, args[2])
+            tfm.exec.chatMessage("<v>[Module] : </v><n> لقد تم حظر اللاعب" .. args[2] .. "الى من الروم نهائيا")
+            print("<v>[Module] : </v><n> لقد تم حظر اللاعب" .. " ".. args[2])
+            ui.addTextArea(3, "", args[2], -377, -85, 1544, 799, 0x070c0f, 0x000000, 1, true)
+            ui.addTextArea(4, "<p align='center'><font size='53'> عذرا تم حظرك من اللعب :(", args[2], 168, 134, 452, 228, 0x070c0f, 0x070c0f, 1, true)
+        end
+    end
+end
+function eventPlayerDied(name)
+    for i = 1, #banned do
+        ui.addTextArea(3, "",banned[i], -377, -85, 1544, 799, 0x070c0f, 0x000000, 1, true)
+        ui.addTextArea(4, "<p align='center'><font size='53'> عذرا تم حظرك من اللعب :(", banned[i], 168, 134, 452, 228, 0x070c0f, 0x070c0f, 1, true)
+    end
+end
+table.foreach(tfm.get.room.playerList, eventNewPlayer)
