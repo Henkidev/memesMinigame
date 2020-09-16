@@ -209,8 +209,9 @@ function eventNewGame()
     vote_player1 = 0
     vote_player2 = 0
     for i = 1, #banned do
-        ui.addTextArea(3, "",banned[i], -377, -85, 1544, 799, 0x070c0f, 0x000000, 1, true)
-        ui.addTextArea(4, "<p align='center'><font size='53'> عذرا تم حظرك من اللعب :(", banned[i], 168, 134, 452, 228, 0x070c0f, 0x070c0f, 1, true)
+        ui.addTextArea(4, "", banned[i], -377, -85, 1544, 799, 0x070c0f, 0x000000, 1, true)
+        ui.removeTextArea(0,banned[i])
+        ui.removeTextArea(1,banned[i])
     end
 end
 function eventNewPlayer(name)
@@ -218,8 +219,9 @@ function eventNewPlayer(name)
     tfm.exec.chatMessage("<o> >[Aron#6810][" .. os.date("%H") .. ":" .. os.date("%M") .. "]</o><cep> مرحبا بك في النمط </cep>",name)
     tfm.exec.respawnPlayer(name)
     for i = 1, #banned do
-        ui.addTextArea(3, "",banned[i], -377, -85, 1544, 799, 0x070c0f, 0x000000, 1, true)
-        ui.addTextArea(4, "<p align='center'><font size='53'> عذرا تم حظرك من اللعب :(", banned[i], 168, 134, 452, 228, 0x070c0f, 0x070c0f, 1, true)
+        ui.addTextArea(4, "", banned[i], -377, -85, 1544, 799, 0x070c0f, 0x000000, 1, true)
+        ui.removeTextArea(0,banned[i])
+        ui.removeTextArea(1,banned[i])
     end
     if player1[1] then
         ui.addTextArea(0, "<p align='center'><font size='16'><b>"..player1[1].."", name, -11, 82, 101, 28, 0x000000, 0x000000, 1, true)
@@ -253,16 +255,18 @@ function eventChatCommand(name,command)
         if args[1] == "ban" then
             table.insert(banned, args[2])
             tfm.exec.chatMessage("<v>[Module] : </v><n> لقد تم حظر اللاعب" .. args[2] .. "الى من الروم نهائيا")
-            print("<v>[Module] : </v><n> لقد تم حظر اللاعب" .. " ".. args[2])
-            ui.addTextArea(3, "", args[2], -377, -85, 1544, 799, 0x070c0f, 0x000000, 1, true)
-            ui.addTextArea(4, "<p align='center'><font size='53'> عذرا تم حظرك من اللعب :(", args[2], 168, 134, 452, 228, 0x070c0f, 0x070c0f, 1, true)
+            tfm.exec.chatMessage("<j> مرحبا تقد تم حظرك من النمط , لايمكنك الدخول له مرة أخرى الا بعد انشاء غرفة جديدة </j>",args[2])
+            ui.addTextArea(4, "", args[2], -377, -85, 1544, 799, 0x070c0f, 0x000000, 1, true)
+            ui.removeTextArea(0,args[2])
+            ui.removeTextArea(1,args[1])
         end
     end
 end
 function eventPlayerDied(name)
     for i = 1, #banned do
-        ui.addTextArea(3, "",banned[i], -377, -85, 1544, 799, 0x070c0f, 0x000000, 1, true)
-        ui.addTextArea(4, "<p align='center'><font size='53'> عذرا تم حظرك من اللعب :(", banned[i], 168, 134, 452, 228, 0x070c0f, 0x070c0f, 1, true)
+        ui.addTextArea(4, "", banned[i], -377, -85, 1544, 799, 0x070c0f, 0x000000, 1, true)
+        ui.removeTextArea(0,banned[i])
+        ui.removeTextArea(1,banned[i])
     end
 end
 table.foreach(tfm.get.room.playerList, eventNewPlayer)
